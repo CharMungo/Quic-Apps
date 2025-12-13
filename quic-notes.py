@@ -56,7 +56,7 @@ class MainWindow(QMainWindow):
 
         self.addb.clicked.connect(self.add)        
         self.remb.clicked.connect(self.rem)
-        self.lisb.clicked.connect(self.lis)
+        self.lisb.clicked.connect(self.switchlist)
         self.input.installEventFilter(self)
     
     def total(self):
@@ -107,7 +107,7 @@ class MainWindow(QMainWindow):
         self.read()
 
     def autorm(self):
-        
+        return
 
     def new(self, line):
         self.amount += 1
