@@ -50,6 +50,12 @@ class MainWindow(QMainWindow):
         
         self.filenum = 1
         self.file = f'/home/mungo/.todo{self.filenum}.txt'
+        file = Path(f'.todo{self.filenum}.txt')
+        if file.exists():
+            print('At least one todo file exists')
+        else:
+            with open(self.file, 'x'):
+                pass
 
         self.total()
         self.read()
