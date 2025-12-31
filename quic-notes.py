@@ -44,19 +44,22 @@ class MainWindow(QMainWindow):
         container = QWidget()
         container.setLayout(layout)
 
-        self.directory = '/home/mungo/'
+        self.directory = '/home/mungo/.todos/'
 
         self.setCentralWidget(container)
         
         self.filenum = 1
-        self.file = f'/home/mungo/.todo{self.filenum}.txt'
-        file = Path(f'.todo{self.filenum}.txt')
-        if file.exists():
+        self.notenums = []
+        self.upnotenums()
+        self.file = f'{self.directory}.todo{self.notenums[0]}.txt'
+        path = Path(self.file)
+        if path.exists():
             print('At least one todo file exists')
         else:
-            with open(self.file, 'x'):
-                pass
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.touch()
 
+        self.index = 0
         self.total()
         self.read()
 
@@ -71,7 +74,16 @@ class MainWindow(QMainWindow):
         for file in files:
             if '.todo' and '.txt' in file:
                 self.amount += 1
+        print(f'Total amount of todo files: {self.amount}')
         return
+
+    def upnotenums(self):
+        self.notenums = []
+        files = os.listdir(self.directory)
+        for file in files:
+            if '.todo' and '.txt' in file:
+                self.notenums.append(file[5])
+        print(f'Todo note numbers: {self.notenums}')
 
     def eventFilter(self, obj, event):
         if obj == self.input and event.type() == QEvent.Type.KeyPress:
@@ -105,11 +117,13 @@ class MainWindow(QMainWindow):
             super().keyPressEvent(event)
         
     def switchlist(self):
+        self.total()
         if self.filenum == self.amount:
-            self.filenum = 1
+            self.filenum = self.notenums[0]
         else:
-            self.filenum += 1
-        self.file = f'/home/mungo/.todo{self.filenum}.txt'
+            self.index += 1
+            self.filenum = self.notenums[self.index]
+        self.file = f'{self.directory}.todo{self.filenum}.txt'
         self.read()
 
     def autorm(self):
@@ -117,27 +131,27 @@ class MainWindow(QMainWindow):
 
     def new(self, line):
         self.amount += 1
-        file = f'/home/mungo/.todo{self.amount}.txt'
+        file = f'{self.directory}.todo{self.amount}.txt'
         with open(file, 'x'):
             pass
         with open(file, 'a') as f:
             f.write(line)
-        self.file = f'/home/mungo/.todo{self.amount}.txt'
+        self.file = f'{self.directory}.todo{self.amount}.txt'
         print(self.file)
         self.notenum.setText(str(self.amount))
         self.filenum = self.amount
+        self.upnotenums()
         self.read()
 
     def read(self):
         path = Path('self.file' + str(self.filenum))
-        file = self.file
         self.notenum.setText(str(self.filenum))
-        with open(file, 'r') as f:
+        with open(self.file, 'r') as f:
             lines = f.readlines()
         
         cline = [line.strip() for line in lines if line.strip() != '']
 
-        with open(file, 'w') as f:
+        with open(self.file, 'w') as f:
             for line in cline:
                 f.write(line + '\n')
 

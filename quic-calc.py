@@ -4,7 +4,6 @@ from PySide6.QtGui import QFont
 import math
 import sys
 
-
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
@@ -55,6 +54,12 @@ class MainWindow(QMainWindow):
         self.threedshapes = ['Sphere', 'Cylinder', 'pyrmid', 'Cone', 'Cube', 'Cuboid']
         self.shape = QComboBox()
         self.shape.hide()
+        self.heightlab = QLabel('Height')
+        self.heightlab.hide()
+        self.widthlab = QLabel('Width')
+        self.widthlab.hide()
+        self.radiuslab = QLabel('Radius')
+        self.radiuslab.hide()
 
         self.geomchoice = QHBoxLayout()
         self.geomchoice.addWidget(self.geomtype)
@@ -195,11 +200,38 @@ class MainWindow(QMainWindow):
         self.input3.clear()
         self.geomunit1.show()
         self.geomunit2.show()
-        self.upshape()
-        self.geomtype.currentIndexChanged.connect(self.upshape)
+        self.upshapeops()
+        self.geomtype.currentIndexChanged.connect(self.upshapeops)
+        self.shape.currentIndexChanged.connect(self.upshape)
         return
-    
+
     def upshape(self):
+        if self.shape.currentText() == self.twodshapes[0]:
+            
+            return
+        if self.shape.currentText() == self.twodshapes[1]:
+            return
+        if self.shape.currentText() == self.twodshapes[2]:
+            return
+        if self.shape.currentText() == self.twodshapes[3]:
+            return
+        if self.shape.currentText() == self.twodshapes[4]:
+            return
+        if self.shape.currentText() == self.threedshapes[0]:
+            return
+        if self.shape.currentText() == self.threedshapes[1]:
+            return
+        if self.shape.currentText() == self.threedshapes[2]:
+            return
+        if self.shape.currentText() == self.threedshapes[3]:
+            return
+        if self.shape.currentText() == self.threedshapes[4]:
+            return
+        if self.shape.currentText() == self.threedshapes[5]:
+            return
+
+
+    def upshapeops(self):
         self.shape.blockSignals(True)
         self.shape.clear()
 
@@ -320,25 +352,24 @@ class MainWindow(QMainWindow):
             height = self.getgeomval(self.geomunits[2])
             depth = self.getgeomval(self.geomunits[3])
             radius = self.getgeomval(self.geomunits[4])
-            
+
             if self.geomtype.currentText() == self.geomtypes[0]:
                 if self.shape.currentText() == self.twodshapes[0]:
                     preresult = (math.pi * radius * radius)
-                
+
                 elif self.shape.currentText() == self.twodshapes[1]:
                     preresult = (math.pi * height * width)
-                
+
                 elif self.shape.currentText() == self.twodshapes[2]:
                     preresult = (width / 2 * height)
-                
+
                 elif self.shape.currentText() == self.twodshapes[3]:
-                    
+
                     if width:
                         preresult = (width * width)
-                    
                     else:
                         preresult = (height * height)
-                
+
                 elif self.shape.currentText() == self.twodshapes[4]:
                     preresult = (height * width)
 
@@ -347,6 +378,8 @@ class MainWindow(QMainWindow):
                 self.geomcon.setText(result)
             else:
                 result = str(preresult)
+                self.geomcon.setText(result)
+
                 self.geomcon.setText(result)
             
             self.uptext(result)
