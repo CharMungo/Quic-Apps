@@ -142,7 +142,10 @@ class MainWindow(QMainWindow):
         with open(self.currentFile, 'r') as f:
             lines = f.read()
             line = lines.splitlines()
-            line.pop(int(self.input.text())-1)
+            if self.input.text() != "":
+                line.pop(int(self.input.text())-1)
+            else:
+                line.pop(0)
             self.newLines = '\n'.join(line)
         with open(self.currentFile, 'w') as f:
             f.write(self.newLines)
