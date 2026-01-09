@@ -24,7 +24,8 @@ class MainWindow(QMainWindow):
         self.note.setWordWrap(True)
         self.addLineButton = QPushButton('Add')
         self.addLineButton.clicked.connect(self.addLine)
-        self.rmLineButton = QPushButton('Remove')
+        self.remLineButton = QPushButton('Remove')
+        self.remLineButton.clicked.connect(self.remLine)
         self.cycleListButton = QPushButton('Cycle Lists')
         self.cycleListButton.clicked.connect(self.cycleList)
         self.newListButton = QPushButton('New List')
@@ -37,7 +38,7 @@ class MainWindow(QMainWindow):
 
         buttonLayout = QHBoxLayout()
         buttonLayout.addWidget(self.addLineButton)
-        buttonLayout.addWidget(self.rmLineButton)
+        buttonLayout.addWidget(self.remLineButton)
         buttonLayout.addWidget(self.cycleListButton)
         buttonLayout.addWidget(self.newListButton)
 
@@ -133,6 +134,17 @@ class MainWindow(QMainWindow):
             f.write(f'\n{self.input.text()}')
         self.input.clear()
         self.readFile()
+
+    def remLine(self):
+        with open(self.currentFile, 'r') as f:
+            lines = f.read()
+            line = lines.splitlines()
+            line.pop(int(self.input.text())-1)
+            self.newLines = '\n'.join(line)
+        with open(self.currentFile, 'w') as f:
+            f.write(self.newLines)
+        self.readFile()
+
 
 app = QApplication(sys.argv)
 window = MainWindow()
