@@ -23,6 +23,7 @@ class MainWindow(QMainWindow):
         self.note.setFont(font)
         self.note.setWordWrap(True)
         self.addLineButton = QPushButton('Add')
+        self.addLineButton.clicked.connect(self.addLine)
         self.rmLineButton = QPushButton('Remove')
         self.cycleListButton = QPushButton('Cycle Lists')
         self.cycleListButton.clicked.connect(self.cycleList)
@@ -101,7 +102,13 @@ class MainWindow(QMainWindow):
     def readFile(self):
         with open(self.currentFile, "r") as f:
             lines = f.read()
-            self.currentNoteContents.setText(lines)
+            array = lines.splitlines()
+            listed = []
+            num = 1
+            for line in array:
+                listed.append(f'{str(num)}.{line}')
+                num +=1
+            self.currentNoteContents.setText('\n'.join(listed))
 
     def newList(self):
         if ".todo1.txt" not in self.fileList:
@@ -121,6 +128,11 @@ class MainWindow(QMainWindow):
                         self.indexFiles()
                         self.readFile()
                         return
+    def addLine(self):
+        with open(self.currentFile, 'a') as f:
+            f.write(f'\n{self.input.text()}')
+        self.input.clear()
+        self.readFile()
 
 app = QApplication(sys.argv)
 window = MainWindow()
