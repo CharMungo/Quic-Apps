@@ -67,7 +67,7 @@ class MainWindow(QMainWindow):
         
         self.indexFiles()
         self.fileIndexNum = 0
-        self.currentNoteNum.setText(str(self.fileIndexNum))
+        self.currentNoteNum.setText(str(self.fileIndexNum+1))
         self.currentFile = f"{self.directory}.todo{self.fileNumList[self.fileIndexNum]}.txt"
         self.readFile()
 
@@ -88,7 +88,7 @@ class MainWindow(QMainWindow):
     def cycleList(self):
         self.fileIndexNum = (self.fileIndexNum + 1) % len(self.fileNumList)
         self.currentFile = f"{self.directory}.todo{self.fileNumList[self.fileIndexNum]}.txt"
-        self.currentNoteNum.setText(str(self.fileIndexNum))
+        self.currentNoteNum.setText(str(self.fileIndexNum+1))
         self.checkEmptyLists()
         self.readFile()
 
@@ -131,7 +131,10 @@ class MainWindow(QMainWindow):
                         return
     def addLine(self):
         with open(self.currentFile, 'a') as f:
-            f.write(f'\n{self.input.text()}')
+            if self.currentNoteContents.text() == "":
+                f.write(f'{self.input.text()}')
+            else:
+                f.write(f'\n{self.input.text()}')
         self.input.clear()
         self.readFile()
 
